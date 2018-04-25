@@ -109,45 +109,56 @@ int duplicates_exist(int row, int col){
 
 int occur = 0;
 void backtrack(int row, int col){
-    // kapag naging -1 -1 na ang value, ibig sabihin umabot na sa top left most value nang walang nakikita
-    if(row == -1 && col == -1){
-        printf("occurrences: %d\n", occur); 
-        printf("NO MORE POSSIBLE SOLUTION\n");
-    } else if(row == N*N){
-        //umabot na sa dulo(lower right most)
-        // solution found
-        occur++; // solution counter
-        printf("FINAL BOARD STATE: %d\n", occur);
-        print_board_status();
-        
-        // goes back to the last non preset cell to generate all possible solutions
-        backtrack(last_row, last_col); 
-    } else if(col == N*N){
-        // umabot na sa rightmost column pero kahit saang row
-        backtrack(row + 1, 0);
-    } else if(board[row][col].is_preset == TRUE){
-        // check mo kung preset
-        backtrack(row, col + 1);
-    } else if(board[row][col].is_preset == FALSE){
-        // increase the current value since simula 0 yung TOS ng non-preset
-        board[row][col].top_of_stack++;
-        
-        //check kung yung value ay exceeding na sa pwedeng iinput sa board
-        if(board[row][col].top_of_stack <= N*N){
-            // check mo kung TOS ay di pa lagpas N*N
-            if(duplicates_exist(row, col)){
-                backtrack(row, col);
-            } else{
-                backtrack(row, col + 1);
-            }
-        } else{
-            // reset back to 0 kapag lumagpas na sa N*N yung balue
-            // this means no value can fit to the cell, kaya kailangan mag backtrack
-            board[row][col].top_of_stack = INIT;
 
-            backtrack(board[row][col].prev_row, board[row][col].prev_col);
+    // kapag naging -1 -1 na ang value, ibig sabihin umabot na sa top left most value nang walang nakikita
+    while(row != -1 || col != -1){
+        if(row == N*N){
+            //umabot na sa dulo(lower right most)
+            // solution found
+            occur++; // solution counter
+            printf("FINAL BOARD STATE: %d\n", occur);
+            print_board_status();
+            
+            // goes back to the last non preset cell to generate all possible solutions
+            row = last_row;
+            col = last_col; 
+        } else if(col == N*N){
+            // umabot na sa rightmost column pero kahit saang row
+            row = row + 1;
+            col = 0;
+        } else if(board[row][col].is_preset == TRUE){
+            // check mo kung preset
+            row = row;
+            col = col + 1;
+        } else if(board[row][col].is_preset == FALSE){
+            // increase the current value since simula 0 yung TOS ng non-preset
+            board[row][col].top_of_stack++;
+            
+            //check kung yung value ay exceeding na sa pwedeng iinput sa board
+            if(board[row][col].top_of_stack <= N*N){
+                // check mo kung TOS ay di pa lagpas N*N
+                if(duplicates_exist(row, col)){
+                    row = row;
+                    col = col;
+                } else{
+                    row = row;
+                    col = col + 1;
+                }
+            } else{
+                // reset back to 0 kapag lumagpas na sa N*N yung balue
+                // this means no value can fit to the cell, kaya kailangan mag backtrack
+                board[row][col].top_of_stack = INIT;
+
+                int new_row = board[row][col].prev_row; 
+                int new_col = board[row][col].prev_col;
+
+                row = new_row;
+                col = new_col;
+            }
         }
     }
+    printf("occurrences: %d\n", occur); 
+    printf("NO MORE POSSIBLE SOLUTION\n");
 }
 
 int main(){
@@ -184,6 +195,8 @@ int main(){
     print_board_status();
     
     printf("\n\n");
-    backtrack(0, 0);    
+    backtrack(0, 0);
+
+    return 0;    
 }
 
