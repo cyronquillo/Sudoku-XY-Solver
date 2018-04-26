@@ -165,7 +165,7 @@ int main(){
     int i, j, k, test_cases;
     FILE * fp;
     
-    fp = fopen("file.txt", "r");
+    fp = fopen("../file.txt", "r");
     fscanf(fp, "%d", &test_cases);
 
     for(k=0; k<test_cases; k++){

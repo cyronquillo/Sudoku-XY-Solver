@@ -11,10 +11,16 @@ public class Main{
 			for(int i=0; i<test_cases; i++){
 				Board b = new Board(in);
 				b.outputBoard();
+				Solver solver = new Solver(b);
+				System.out.println("hello");
+				solver.backtrack(0,0);
+				solver.viewSolutions();
 			}
 			in.close();
 		}catch(Exception e){
-			System.out.println(e.getMessage());
+			System.out.println("wat");
+			System.out.println(e);
 		}
+
 	}
 }

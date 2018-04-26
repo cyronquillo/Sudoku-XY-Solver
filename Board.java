@@ -31,6 +31,23 @@ public class Board{
 		}
 	}
 
+	public Board(Board replica){
+		this.size = replica.size;
+		this.last_row = replica.last_row;
+		this.last_col = replica.last_col;
+		
+		board = new SudoBox[this.size][this.size];
+		for(int i = 0; i < replica.size; i++){
+			for(int j = 0; j < replica.size; j++){
+				this.board[i][j].is_preset = replica.board[i][j].is_preset;
+				this.board[i][j].top_of_stack = replica.board[i][j].top_of_stack;
+				this.board[i][j].prev_row = replica.board[i][j].prev_row;
+				this.board[i][j].prev_col = replica.board[i][j].prev_col;
+			}
+		}
+
+	}
+
 	public void outputBoard(){
 		for(int i=0; i<this.size; i++){
 			for(int j=0; j<this.size; j++){
