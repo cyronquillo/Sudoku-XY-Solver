@@ -4,7 +4,7 @@ import java.io.FileReader;
 public class Main{
 	public static void main(String[] args){
 		try{
-			BufferedReader in = new BufferedReader(new FileReader("file.txt"));
+			BufferedReader in = new BufferedReader(new FileReader("input.in"));
 
 			int test_cases = Integer.parseInt(in.readLine());
 			System.out.println(test_cases);
