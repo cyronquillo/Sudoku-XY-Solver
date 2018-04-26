@@ -12,7 +12,6 @@ public class Main{
 				Board b = new Board(in);
 				b.outputBoard();
 				Solver solver = new Solver(b);
-				System.out.println("hello");
 				solver.backtrack(0,0);
 				solver.viewSolutions();
 			}

@@ -6,7 +6,12 @@ public class Solver{
     public Solver(Board solve){
         this.solutions = new ArrayList<Board>();
         this.num_of_solutions = 0;
-        this.solve = new Board(solve);
+        try{
+            this.solve = new Board(solve);
+        } catch(Exception e){
+            System.out.println(e);
+            System.out.println("hello");
+        }
         
     }
 
@@ -123,7 +128,7 @@ public class Solver{
 
     public void viewSolutions(){
         for(int i = 0; i < solutions.size(); i++){
-            System.out.println("Solution #" + i + ":");
+            System.out.println("\nSolution #" + i + ":");
             solutions.get(i).outputBoard();
         }
     }

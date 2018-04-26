@@ -10,7 +10,7 @@ public class Board{
 		try{
 			this.size = (int) Math.pow(Integer.parseInt(in.readLine().trim()), 2);
 			int row = 0, prev_row = -1, prev_col = -1;
-			board = new SudoBox[size][size];
+			this.board = new SudoBox[size][size];
 			while(row < this.size){
 				String line = in.readLine();
 				String[] nums = line.split(" ");
@@ -36,13 +36,11 @@ public class Board{
 		this.last_row = replica.last_row;
 		this.last_col = replica.last_col;
 		
-		board = new SudoBox[this.size][this.size];
+		this.board = new SudoBox[this.size][this.size];
 		for(int i = 0; i < replica.size; i++){
 			for(int j = 0; j < replica.size; j++){
+				this.board[i][j] = new SudoBox(replica.board[i][j].top_of_stack, replica.board[i][j].prev_row, replica.board[i][j].prev_col);
 				this.board[i][j].is_preset = replica.board[i][j].is_preset;
-				this.board[i][j].top_of_stack = replica.board[i][j].top_of_stack;
-				this.board[i][j].prev_row = replica.board[i][j].prev_row;
-				this.board[i][j].prev_col = replica.board[i][j].prev_col;
 			}
 		}
 
