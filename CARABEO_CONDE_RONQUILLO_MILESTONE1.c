@@ -103,7 +103,7 @@ int box_duplicates(int row, int col){
 
 int x_duplicates(){
     int i,j,k,l;
-    if(type != SUDOKU_X || type != SUDOKU_XY) return FALSE;
+    if(type != SUDOKU_X && type != SUDOKU_XY) return FALSE;
 
     for(i=0;i<N*N;i++){
         for(j=0; j<N*N; j++){
@@ -145,8 +145,8 @@ int x_duplicates(){
 
 int y_duplicates(){
     int i, j, counter = 0;
-    if((N*N) % 2 == 0) return FALSE;
-    if(type != SUDOKU_Y || type != SUDOKU_XY) return FALSE;
+    if(type != SUDOKU_Y && type != SUDOKU_XY) return FALSE;
+    if((N*N) % 2 == 0) return TRUE;
 
     int duplicated[N*N];
     for(i=0; i<(N*N / 2); i++){
