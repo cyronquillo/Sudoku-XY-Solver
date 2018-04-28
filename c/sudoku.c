@@ -2,10 +2,16 @@
 #include <stdlib.h>
 #define TRUE 1
 #define FALSE 0
-#define INIT 0 
+#define INIT 0
+#define SUDOKU 0 
+#define SUDOKU_X 1 
+#define SUDOKU_Y 2 
+#define SUDOKU_XY 3 
+
+int type = SUDOKU_XY;
 
 typedef struct sudokuBox{
-	int is_preset;          // boolean variable para malaman kung part sya ng table or input sya ng user
+    int is_preset;          // boolean variable para malaman kung part sya ng table or input sya ng user
     int top_of_stack;       // current value being held by the cell. [0-9] ang content nyan. 0 kapag di pa nagagalaw 
     
     // 2 values below hold the coordinates of the nearest cell to its left that has a is_preset value of FALSE 
@@ -16,7 +22,6 @@ typedef struct sudokuBox{
 int N; // size of the mini grid 
 int last_row, last_col; // coordinates of the last nonpreset value
 sudoBox ** board; // main variable of the whole board
-
 
 // function for printing the current content of the board
 void print_board_status(){
@@ -96,11 +101,102 @@ int box_duplicates(int row, int col){
 
 }
 
+int x_duplicates(){
+    int i,j,k,l;
+    if(type != SUDOKU_X && type != SUDOKU_XY) return FALSE;
+
+    for(i=0;i<N*N;i++){
+        for(j=0; j<N*N; j++){
+            if(i != j) continue;
+            else if(board[i][j].top_of_stack == 0) continue;
+            else{
+                for(k=0; k<N*N; k++){
+                    for(l=0; l<N*N; l++){
+                        if(k != l) continue;
+                        else if(i == k && j ==l) continue;
+                        else if(board[i][j].top_of_stack == board[k][l].top_of_stack){
+                            return TRUE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for(i=(N*N - 1); i>=0; i--){
+        for(j=(N*N - 1); j>=0; j--){
+            if((i+j) != (N*N)-1) continue;
+            else if(board[i][j].top_of_stack == 0) continue;
+            else{
+                for(k=(N*N - 1); k>=0; k--){
+                    for(l=(N*N - 1); l>=0; l--){
+                        if((k+l) != (N*N)-1) continue;
+                        else if(i == k && j ==l) continue;
+                        else if(board[i][j].top_of_stack == board[k][l].top_of_stack){
+                            return TRUE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return FALSE;
+}
+
+int y_duplicates(){
+    int i, j, counter = 0;
+    if((N*N) % 2 == 0) return FALSE;
+    if(type != SUDOKU_Y && type != SUDOKU_XY) return FALSE;
+
+    int duplicated[N*N];
+    for(i=0; i<(N*N / 2); i++){
+        for(j=0; j< (N*N / 2); j++){
+            if(i == j){
+                duplicated[counter++] = board[i][j].top_of_stack;
+            }
+        }
+    }
+
+    for(i=(N*N / 2); i<N*N; i++){
+        duplicated[counter++] = board[i][N*N/2].top_of_stack;
+    }
+
+    for(i = 0; i < N*N; i++){
+        for(j = 0; j < N*N; j++){
+            if(i == j) continue;
+            if(duplicated[i] == 0) break;
+            if(duplicated[i] == duplicated[j])
+                return TRUE;
+        }
+    }
+
+
+    counter = 0;
+    for(i=0; i<(N*N/2); i++){
+        for(j=(N*N - 1); j>= (N*N/2); j--){
+            if(i+j == (N*N-1)) duplicated[counter++] = board[i][j].top_of_stack;
+        }
+    }
+
+    for(i = 0; i < N*N; i++){
+        for(j = 0; j < N*N; j++){
+            if(i == j) continue;
+            if(duplicated[i] == 0) break;
+            if(duplicated[i] == duplicated[j])
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 int duplicates_exist(int row, int col){
     // general function for checking for duplicats
     if(box_duplicates(row, col)) return TRUE; 
     if(row_duplicates(row)) return TRUE; 
     if(col_duplicates(col)) return TRUE; 
+    if(x_duplicates()) return TRUE;
+    if(y_duplicates()) return TRUE;
     // add x_duplicates checking
     // add y_duplicates checking for odd value of N
     
@@ -116,8 +212,8 @@ void backtrack(int row, int col){
             //umabot na sa dulo(lower right most)
             // solution found
             occur++; // solution counter
-            printf("FINAL BOARD STATE: %d\n", occur);
-            print_board_status();
+            //printf("FINAL BOARD STATE: %d\n", occur);
+            // print_board_status(); 
             
             // goes back to the last non preset cell to generate all possible solutions
             row = last_row;
@@ -165,7 +261,7 @@ int main(){
     int i, j, k, test_cases;
     FILE * fp;
     
-    fp = fopen("../file.txt", "r");
+    fp = fopen("../input.in", "r");
     fscanf(fp, "%d", &test_cases);
 
     for(k=0; k<test_cases; k++){
@@ -194,7 +290,7 @@ int main(){
 	    }
 	    last_row = prev_row;
 	    last_col = prev_col;
-	    print_board_status();
+	    print_board_status(); 
 	    
 	    printf("\n\n");
 	    backtrack(0, 0);
