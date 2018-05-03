@@ -22,8 +22,12 @@ import java.awt.FlowLayout;
 import javax.imageio.ImageIO;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import java.awt.image.BufferedImage;
+
+import java.util.ArrayList;
 
 public class UI{
 	private static JPanel cardHolder;
@@ -48,9 +52,13 @@ public class UI{
 	private static JButton checkxy;
 	private static JButton filechooser;
 
-	private static final float RED = (float) 153/255;
-	private static final float GREEN = (float) 143/255;
-	private static final float BLUE = (float) 127/255;
+	private static BufferedReader in;
+
+	private static ArrayList<Board> puzzles;
+
+	public static final float RED = (float) 153/255;
+	public static final float GREEN = (float) 143/255;
+	public static final float BLUE = (float) 127/255;
 
 	public static void main(String[] args){
 		JFrame frame = new JFrame("Sudoku XY");
@@ -62,6 +70,8 @@ public class UI{
 		endWin = new JPanel();
 		endLose = new JPanel();
 		solns = new JPanel();
+
+		puzzles = new ArrayList<Board>();
 
 		/*START OF MENU PANEL*/
 		start = new JButton();
@@ -372,6 +382,21 @@ public class UI{
 				int returnValue = jfc.showOpenDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION){
 					File selected = jfc.getSelectedFile();
+
+					try{
+						in = new BufferedReader(new FileReader(selected));
+						int test_cases = Integer.parseInt(in.readLine());
+
+						for(int i=0; i<test_cases; i++){
+							Board b = new Board(in);
+							puzzles.add(b);
+						}
+
+						in.close();
+						game.setPuzzles(puzzles);
+					}catch(Exception ex){
+						System.out.println(ex);
+					}
 				}	
 			}
 		});
