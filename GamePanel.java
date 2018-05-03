@@ -7,7 +7,10 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.BorderFactory;
 
+import java.awt.Font;
 import java.awt.Color;
 import java.awt.CardLayout;
 import java.awt.Image;
@@ -16,7 +19,7 @@ import java.awt.Insets;
 import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
+import java.awt.GridLayout;
 import javax.imageio.ImageIO;
 
 import java.io.File;
@@ -30,6 +33,8 @@ public class GamePanel extends JPanel{
 	private static JPanel puzzlePanel;
 	private static JButton next;
 	private static JButton prev;
+
+	private static final Font font = new Font("Verdana", Font.BOLD, 15);
 
 	public GamePanel(){
 		this.setLayout(new BorderLayout());
@@ -73,6 +78,20 @@ public class GamePanel extends JPanel{
 		this.add(buttonPanel, BorderLayout.SOUTH);
 		this.add(puzzlePanel, BorderLayout.CENTER);
 
+		next.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				CardLayout c = (CardLayout) puzzlePanel.getLayout();
+
+				c.next(puzzlePanel);
+			}
+		});
+		prev.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				CardLayout c = (CardLayout) puzzlePanel.getLayout();
+
+				c.previous(puzzlePanel);
+			}
+		});
 	}
 
 	public void setPuzzles(ArrayList<Board> cases){
@@ -81,20 +100,44 @@ public class GamePanel extends JPanel{
 		for(int i=0; i<this.puzzles.size(); i++){
 			JPanel panel = new JPanel();
 			int n = this.puzzles.get(i).size;
-			JTable sudoku = new JTable(n, n);
-
-			this.fillTable(sudoku, this.puzzles.get(i), n);
-			panel.add(sudoku);
+			panel.setLayout(new GridLayout(n,n));
+			panel.setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.BLACK));
+			panel.setBackground(Color.BLACK);
+			this.fillTable(panel, this.puzzles.get(i), n);
 			this.puzzlePanel.add(panel, String.valueOf(i));
 		}
 
 		this.revalidate();
 	}
 
-	public void fillTable(JTable sudoku, Board puzzle, int size){
+	public void fillTable(JPanel sudoku, Board puzzle, int size){
+		JTextField cell;
+		int subgrid = (int) Math.sqrt(size);
 		for(int i=0; i<size; i++){
 			for(int j=0; j<size; j++){
-				sudoku.setValueAt(i, j, puzzle.board[i][j].top_of_stack);
+
+				if(puzzle.board[i][j].is_preset){
+					cell = new JTextField(String.valueOf(puzzle.board[i][j].top_of_stack));
+					cell.setEnabled(false);
+				} else{
+					cell = new JTextField(" ");
+					cell.setBackground(Color.YELLOW);
+				}
+				cell.addKeyListener(new CellKeyListener(i, j, puzzle));
+
+				if(i%subgrid == 0 && j%subgrid==0){
+					cell.setBorder(BorderFactory.createMatteBorder(3,3,1,1,Color.BLACK));
+				}else if(i % subgrid == 0){
+					cell.setBorder(BorderFactory.createMatteBorder(3,1,1,1,Color.BLACK));
+				}else if(j % subgrid == 0){
+					cell.setBorder(BorderFactory.createMatteBorder(1,3,1,1,Color.BLACK));
+				}else{
+					cell.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
+				}
+				sudoku.add(i+" "+j,cell);
+				cell.setFont(font);
+				//cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				cell.setHorizontalAlignment(JTextField.CENTER);
 			}
 		}
 	}
