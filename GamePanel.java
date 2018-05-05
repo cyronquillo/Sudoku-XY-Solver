@@ -27,12 +27,16 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 public class GamePanel extends JPanel{
 	private static ArrayList<Board> puzzles;
 	private static JPanel buttonPanel;
-	private static JPanel puzzlePanel;
 	private static JButton next;
 	private static JButton prev;
+
+	public static HashMap<JPanel, Board> panelToPuzzle = new HashMap<JPanel, Board>();
+	public static JPanel puzzlePanel;
 
 	private static final Font font = new Font("Verdana", Font.BOLD, 15);
 
@@ -96,14 +100,16 @@ public class GamePanel extends JPanel{
 
 	public void setPuzzles(ArrayList<Board> cases){
 		this.puzzles = cases;
-
+		
 		for(int i=0; i<this.puzzles.size(); i++){
+			Board curr = this.puzzles.get(i);
 			JPanel panel = new JPanel();
-			int n = this.puzzles.get(i).size;
+			panelToPuzzle.put(panel, curr);
+			int n = curr.size;
 			panel.setLayout(new GridLayout(n,n));
 			panel.setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.BLACK));
 			panel.setBackground(Color.BLACK);
-			this.fillTable(panel, this.puzzles.get(i), n);
+			this.fillTable(panel, curr, n);
 			this.puzzlePanel.add(panel, String.valueOf(i));
 		}
 

@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JComponent;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JFileChooser;
@@ -12,6 +13,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import java.awt.Color;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -323,11 +325,132 @@ public class UI{
 		frame.setContentPane(cardHolder);
 
 		frame.pack();
-		frame.setSize(700, 500);
+		frame.setSize(1050, 750);
 	    frame.setLocation(500, 100);
 	    frame.setVisible(true);
 		
 	    /*ACTION LISTENERS*/
+
+		start.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+
+				c.show(cardHolder, "Puzzle");
+			}
+		});
+		check.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				// create solver instance
+				Solver copyChecker = new Solver(copy, "n");
+				boolean holder = false;
+				for(int i = 0; i < copy.size; i++){
+					for(int j = 0; j < copy.size; j++){
+						holder = copyChecker.duplicates_exist(i, j, true);
+						if(holder) break;
+					}
+					if(holder) break;
+				}
+				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+			}
+		});
+		checkx.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				// create solver instance
+				Solver copyChecker = new Solver(copy, "x");
+				boolean holder = false;
+				for(int i = 0; i < copy.size; i++){
+					for(int j = 0; j < copy.size; j++){
+						holder = copyChecker.duplicates_exist(i, j, true);
+						if(holder) break;
+					}
+					if(holder) break;
+				}
+				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+			}
+		});
+		checky.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				// create solver instance
+				Solver copyChecker = new Solver(copy, "y");
+				boolean holder = false;
+				for(int i = 0; i < copy.size; i++){
+					for(int j = 0; j < copy.size; j++){
+						holder = copyChecker.duplicates_exist(i, j, true);
+						if(holder) break;
+					}
+					if(holder) break;
+				}
+				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+			}
+		});
+		checkxy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				// create solver instance
+				Solver copyChecker = new Solver(copy, "xy");
+				boolean holder = false;
+				for(int i = 0; i < copy.size; i++){
+					for(int j = 0; j < copy.size; j++){
+						holder = copyChecker.duplicates_exist(i, j, true);
+						if(holder) break;
+					}
+					if(holder) break;
+				}
+				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+			}
+		});
+
+		reset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				/* 
+					not fully functioning
+				 */
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				// create solver instance
+				Solver copyChecker = new Solver(copy, "xy");
+				// copyChecker.clearNonPreset();
+				// GamePanel.panelToPuzzle.put(card, copyChecker.solve);
+				JOptionPane.showMessageDialog(null, "Reset Values");
+			}
+		});
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				CardLayout c = (CardLayout) cardHolder.getLayout();
@@ -382,7 +505,11 @@ public class UI{
 				int returnValue = jfc.showOpenDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION){
 					File selected = jfc.getSelectedFile();
-
+					Component[] boards = GamePanel.puzzlePanel.getComponents();
+					for(int i = 0; i < boards.length; i++){
+						GamePanel.puzzlePanel.remove(boards[i]);
+					}
+					puzzles.clear();
 					try{
 						in = new BufferedReader(new FileReader(selected));
 						int test_cases = Integer.parseInt(in.readLine());
@@ -394,6 +521,7 @@ public class UI{
 
 						in.close();
 						game.setPuzzles(puzzles);
+						frame.repaint();
 					}catch(Exception ex){
 						System.out.println(ex);
 					}
