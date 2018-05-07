@@ -204,10 +204,14 @@ public class Solver{
 
     public void viewSolutions(){
         System.out.println("Total Number of Solutions: " + this.num_of_solutions);
-        // for(int i = 0; i < solutions.size(); i++){
-        //     System.out.println("\nSolution #" + (i + 1) + ":");
-        //     solutions.get(i).outputBoard();
-        // }
+        /*for(int i = 0; i < solutions.size(); i++){
+            System.out.println("\nSolution #" + (i + 1) + ":");
+            solutions.get(i).outputBoard();
+        }*/
+    }
+
+    public ArrayList<Board> getSolutions(){
+        return solutions;
     }
 
     public void clearNonPreset(){
@@ -218,5 +222,18 @@ public class Solver{
                 }
             }
         }
+    }
+
+    public boolean zero_exists(Board puzzle){
+        int size = puzzle.size;
+
+        for(int i=0; i<size; i++){
+            for(int j=0; j<size; j++){
+                if(puzzle.board[i][j].top_of_stack == 0) return true;
+                else continue;
+            }
+        }
+
+        return false;
     }
 }

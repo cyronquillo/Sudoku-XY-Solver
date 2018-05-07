@@ -6,7 +6,6 @@ import javax.swing.BoxLayout;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 
@@ -76,8 +75,8 @@ public class GamePanel extends JPanel{
 		}
 
 
-		buttonPanel.add(next);
 		buttonPanel.add(prev);
+		buttonPanel.add(next);
 
 		this.add(buttonPanel, BorderLayout.SOUTH);
 		this.add(puzzlePanel, BorderLayout.CENTER);
@@ -148,4 +147,17 @@ public class GamePanel extends JPanel{
 		}
 	}
 
+	public static Board setToOriginal(Board board){
+		Board temp = new Board(board);
+
+		for(int i=0; i<temp.size; i++){
+			for(int j=0; j<temp.size; j++){
+				if(!temp.board[i][j].is_preset){
+					temp.board[i][j].top_of_stack = 0;
+				}
+			}
+		}
+
+		return temp;
+	}
 }

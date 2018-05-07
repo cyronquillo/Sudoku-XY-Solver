@@ -20,7 +20,6 @@ import java.awt.Insets;
 import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
 import javax.imageio.ImageIO;
 
 import java.io.File;
@@ -37,7 +36,8 @@ public class UI{
 	private static JPanel puzzleHolder;
 	private static JPanel endWin;
 	private static JPanel endLose;
-	private static JPanel solns;
+
+	private static Solutions solns;
 
 	private static GamePanel game;
 
@@ -56,6 +56,8 @@ public class UI{
 
 	private static BufferedReader in;
 
+	private static String type;
+
 	private static ArrayList<Board> puzzles;
 
 	public static final float RED = (float) 153/255;
@@ -65,13 +67,15 @@ public class UI{
 	public static void main(String[] args){
 		JFrame frame = new JFrame("Sudoku XY");
 
+		type = "";
+
 		cardHolder = new JPanel(new CardLayout());
 
 		menu = new JPanel();
 		puzzleHolder = new JPanel();
 		endWin = new JPanel();
 		endLose = new JPanel();
-		solns = new JPanel();
+		solns = new Solutions();
 
 		puzzles = new ArrayList<Board>();
 
@@ -79,6 +83,7 @@ public class UI{
 		start = new JButton();
 
 		menu.setBackground(new Color(RED, GREEN, BLUE));
+		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
 		try {
 
 			BufferedImage img = ImageIO.read(new File("Images/play-button.png"));
@@ -88,14 +93,18 @@ public class UI{
 			start.setBackground(new Color(RED, GREEN, BLUE));
 			start.setMargin(new Insets(0, 0, 0, 0));
 			start.setBorder(new EmptyBorder(0,0,0,0));
+			start.setAlignmentX(menu.CENTER_ALIGNMENT);
 
 			BufferedImage mainPanelImage;
 
 			mainPanelImage = ImageIO.read(new File("Images/title.png"));
 			JLabel picLabel = new JLabel(new ImageIcon(mainPanelImage));
 			picLabel.setPreferredSize(new Dimension(570, 275));
+			picLabel.setAlignmentX(menu.CENTER_ALIGNMENT);
 
+			menu.add(Box.createVerticalStrut(250));
 			menu.add(picLabel);
+			menu.add(Box.createVerticalStrut(50));
 			menu.add(start);
 		} catch (Exception ex) {
 			System.out.println(ex);
@@ -106,24 +115,28 @@ public class UI{
 		/*START OF WIN PANEL*/
 		solutions = new JButton();
 		endWin.setBackground(new Color(RED, GREEN, BLUE));
-		endWin.setLayout(new FlowLayout());
+		endWin.setLayout(new BoxLayout(endWin, BoxLayout.Y_AXIS));
 		try {
 
 			BufferedImage img = ImageIO.read(new File("Images/sol-button.png"));
 
 			solutions.setIcon(new ImageIcon(img));
-			solutions.setSize(50,50);
+			/*solutions.setSize(50,50);*/
 			solutions.setBackground(new Color(RED, GREEN, BLUE));
 			solutions.setMargin(new Insets(0, 0, 0, 0));
 			solutions.setBorder(new EmptyBorder(0,0,0,0));
-
+			solutions.setAlignmentX(endWin.CENTER_ALIGNMENT);
 
 			BufferedImage mainPanelImage;
 
 			mainPanelImage = ImageIO.read(new File("Images/congrats.png"));
 			JLabel picLabel = new JLabel(new ImageIcon(mainPanelImage));
-			picLabel.setPreferredSize(new Dimension(600, 250));
+			/*picLabel.setPreferredSize(new Dimension(600, 250));*/
+			picLabel.setAlignmentX(endWin.CENTER_ALIGNMENT);
+
+			endWin.add(Box.createVerticalStrut(250));
 			endWin.add(picLabel);
+			endWin.add(Box.createVerticalStrut(50));
 			endWin.add(solutions);
 
 		} catch (Exception ex) {
@@ -176,49 +189,11 @@ public class UI{
 		}
 		/*END OF LOSE PANEL*/
 
-		/*START OF SOLUTIONS PANEL*/
-		JButton next = new JButton();
-		JButton prev = new JButton();
-		JPanel buttons = new JPanel();
-		JPanel answer = new JPanel();
-		try {
-			buttons.setBackground(new Color(RED, GREEN, BLUE));
-			buttons.setLayout(new FlowLayout(FlowLayout.CENTER,70,10));
-			BufferedImage img = ImageIO.read(new File("Images/next-button.png"));
-			answer.setBackground(Color.PINK);
-			next.setIcon(new ImageIcon(img));
-			next.setSize(50,50);
-			next.setBackground(new Color(RED, GREEN, BLUE));
-			next.setMargin(new Insets(0, 0, 0, 0));
-			next.setBorder(new EmptyBorder(0,0,0,0));
-
-			img = ImageIO.read(new File("Images/prev-button.png"));
-
-			prev.setIcon(new ImageIcon(img));
-			prev.setSize(50,50);
-			prev.setBackground(new Color(RED, GREEN, BLUE));
-			prev.setMargin(new Insets(0, 0, 0, 0));
-			prev.setBorder(new EmptyBorder(0,0,0,0));
-
-			
-			buttons.add(prev);
-			buttons.add(next);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-		solns.setLayout(new BorderLayout());
-		solns.add(buttons,BorderLayout.SOUTH);
-		solns.add(answer,BorderLayout.CENTER);
-		solns.setBackground(new Color(RED, GREEN, BLUE));
-		/*END OF SOLUTIONS PANEL*/
-
 		/*START OF PUZZLE PANEL*/
 		JPanel sideOptions = new JPanel();
 		JPanel topOptions = new JPanel();
 
 		game = new GamePanel();
-		win = new JButton("Win");
-		lose = new JButton("Lose");
 		reset = new JButton();
 		check = new JButton();
 		checkx = new JButton();
@@ -286,10 +261,6 @@ public class UI{
 			checkxy.setMargin(new Insets(0, 0, 0, 0));
 			checkxy.setBorder(new EmptyBorder(0,0,0,0));
 			checkxy.setAlignmentX(checkxy.CENTER_ALIGNMENT);
-
-			
-			sideOptions.add(win);//temp button only
-			sideOptions.add(lose);//temp button only
 			
 			/*sideOptions.add(Box.createHorizontalStrut(10));*/
 			sideOptions.add(check);
@@ -325,8 +296,8 @@ public class UI{
 		frame.setContentPane(cardHolder);
 
 		frame.pack();
-		frame.setSize(1050, 750);
-	    frame.setLocation(500, 100);
+		frame.setSize(950, 700);
+	    frame.setLocation(100, 0);
 	    frame.setVisible(true);
 		
 	    /*ACTION LISTENERS*/
@@ -340,6 +311,8 @@ public class UI{
 		});
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				type = "n";
+
 				JPanel card = null;
 				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
         			if (comp.isVisible() == true) {
@@ -358,11 +331,21 @@ public class UI{
 					}
 					if(holder) break;
 				}
-				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+				
+				holder = copyChecker.zero_exists(copy);
+
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+				if(!holder){
+					c.show(cardHolder, "Win");
+				} else {
+					c.show(cardHolder, "Lose");
+				}
 			}
 		});
 		checkx.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				type = "x";
+
 				JPanel card = null;
 				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
         			if (comp.isVisible() == true) {
@@ -373,6 +356,7 @@ public class UI{
 				Board copy = GamePanel.panelToPuzzle.get(card);
 				// create solver instance
 				Solver copyChecker = new Solver(copy, "x");
+
 				boolean holder = false;
 				for(int i = 0; i < copy.size; i++){
 					for(int j = 0; j < copy.size; j++){
@@ -381,11 +365,16 @@ public class UI{
 					}
 					if(holder) break;
 				}
-				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+				if(!holder){
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					c.show(cardHolder, "Win");
+				}
 			}
 		});
 		checky.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				type = "y";
+
 				JPanel card = null;
 				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
         			if (comp.isVisible() == true) {
@@ -404,11 +393,16 @@ public class UI{
 					}
 					if(holder) break;
 				}
-				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+				if(!holder){
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					c.show(cardHolder, "Win");
+				}
 			}
 		});
 		checkxy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				type = "xy";
+
 				JPanel card = null;
 				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
         			if (comp.isVisible() == true) {
@@ -427,7 +421,10 @@ public class UI{
 					}
 					if(holder) break;
 				}
-				if(!holder) JOptionPane.showMessageDialog(null, "Good!");
+				if(!holder){
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					c.show(cardHolder, "Win");
+				}
 			}
 		});
 
@@ -444,6 +441,7 @@ public class UI{
 				}
 
 				Board copy = GamePanel.panelToPuzzle.get(card);
+				
 				// create solver instance
 				Solver copyChecker = new Solver(copy, "xy");
 				// copyChecker.clearNonPreset();
@@ -451,27 +449,12 @@ public class UI{
 				JOptionPane.showMessageDialog(null, "Reset Values");
 			}
 		});
+
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				CardLayout c = (CardLayout) cardHolder.getLayout();
 
 				c.show(cardHolder, "Puzzle");
-			}
-		});
-
-		win.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				CardLayout c = (CardLayout) cardHolder.getLayout();
-
-				c.show(cardHolder, "Win");
-			}
-		});
-
-		lose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				CardLayout c = (CardLayout) cardHolder.getLayout();
-
-				c.show(cardHolder, "Lose");
 			}
 		});
 
@@ -485,16 +468,50 @@ public class UI{
 
 		solutions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				CardLayout c = (CardLayout) cardHolder.getLayout();
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
 
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				Board original = GamePanel.setToOriginal(copy);
+
+				original.outputBoard();
+				// create solver instance
+				Solver copyChecker = new Solver(original, type);
+				copyChecker.backtrack(0,0);
+				solns.displaySolutions(copyChecker);
+
+				CardLayout c = (CardLayout) cardHolder.getLayout();
 				c.show(cardHolder, "Solutions");
+
+
 			}
 		});
 
 		solutions2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				CardLayout c = (CardLayout) cardHolder.getLayout();
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
 
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				Board original = GamePanel.setToOriginal(copy);
+
+				copy.outputBoard();
+				System.out.println("Fdsfds");
+				original.outputBoard();
+				// create solver instance
+				Solver copyChecker = new Solver(original, type);
+				copyChecker.backtrack(0,0);
+				solns.displaySolutions(copyChecker);
+
+				CardLayout c = (CardLayout) cardHolder.getLayout();
 				c.show(cardHolder, "Solutions");
 			}
 		});
