@@ -37,6 +37,7 @@ class CellKeyListener implements KeyListener {
             if(num > this.puzzle.size) num = this.puzzle.size;
             if((c < '0' || c > '9') && c != KeyEvent.VK_BACK_SPACE){
                 e.consume();
+                textField.setText("" + num);
             } else{
                 this.puzzle.board[this.row][this.col].top_of_stack = num;
                 this.puzzle.outputBoard();
