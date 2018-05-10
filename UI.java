@@ -47,6 +47,7 @@ public class UI{
 	private static JButton win;
 	private static JButton retry;
 	private static JButton solutions2;
+	private static JButton retry2;
 	private static JButton lose;
 	private static JButton reset;
 	private static JButton check;
@@ -80,7 +81,7 @@ public class UI{
 		puzzleHolder = new JPanel();
 		endWin = new JPanel();
 		endLose = new JPanel();
-		solns = new Solutions();
+		/*solns = new Solutions();*/
 
 		puzzles = new ArrayList<Board>();
 
@@ -119,6 +120,7 @@ public class UI{
 
 		/*START OF WIN PANEL*/
 		solutions = new JButton();
+		retry2 = new JButton();
 		endWin.setBackground(new Color(RED, GREEN, BLUE));
 		endWin.setLayout(new BoxLayout(endWin, BoxLayout.Y_AXIS));
 		try {
@@ -139,9 +141,17 @@ public class UI{
 			/*picLabel.setPreferredSize(new Dimension(600, 250));*/
 			picLabel.setAlignmentX(endWin.CENTER_ALIGNMENT);
 
+			img = ImageIO.read(new File("Images/retry-button.png"));
+			retry2.setIcon(new ImageIcon(img));
+			retry2.setBackground(new Color(RED, GREEN, BLUE));
+			retry2.setMargin(new Insets(0, 0, 0, 0));
+			retry2.setBorder(new EmptyBorder(0,0,0,0));
+			retry2.setAlignmentX(endWin.CENTER_ALIGNMENT);
+
 			endWin.add(Box.createVerticalStrut(250));
 			endWin.add(picLabel);
 			endWin.add(Box.createVerticalStrut(50));
+			endWin.add(retry2);
 			endWin.add(solutions);
 
 		} catch (Exception ex) {
@@ -221,7 +231,7 @@ public class UI{
 
 		try{
 			BufferedImage img = ImageIO.read(new File("Images/reset-button.png"));
-			reset.setPreferredSize(new Dimension(60, 60));
+			reset.setPreferredSize(new Dimension(100, 60));
 			reset.setIcon(new ImageIcon(img));
 			reset.setBackground(new Color(RED, GREEN, BLUE));
 			reset.setMargin(new Insets(0, 0, 0, 0));
@@ -247,7 +257,7 @@ public class UI{
 			check.setBorder(new EmptyBorder(0,0,0,0));
 			check.setAlignmentX(check.CENTER_ALIGNMENT);
 
-			img = ImageIO.read(new File("Images/check-button.png"));
+			img = ImageIO.read(new File("Images/show.png"));
 			gen.setIcon(new ImageIcon(img));
 			gen.setSize(50,50);
 			gen.setBackground(new Color(RED, GREEN, BLUE));
@@ -263,7 +273,7 @@ public class UI{
 			checkx.setBorder(new EmptyBorder(0,0,0,0));
 			checkx.setAlignmentX(checkx.CENTER_ALIGNMENT);
 
-			img = ImageIO.read(new File("Images/checkx-button.png"));
+			img = ImageIO.read(new File("Images/show.png"));
 			genx.setIcon(new ImageIcon(img));
 			genx.setSize(50,50);
 			genx.setBackground(new Color(RED, GREEN, BLUE));
@@ -279,7 +289,7 @@ public class UI{
 			checky.setBorder(new EmptyBorder(0,0,0,0));
 			checky.setAlignmentX(checky.CENTER_ALIGNMENT);
 
-			img = ImageIO.read(new File("Images/checky-button.png"));
+			img = ImageIO.read(new File("Images/show.png"));
 			geny.setIcon(new ImageIcon(img));
 			geny.setSize(50,50);
 			geny.setBackground(new Color(RED, GREEN, BLUE));
@@ -295,7 +305,7 @@ public class UI{
 			checkxy.setBorder(new EmptyBorder(0,0,0,0));
 			checkxy.setAlignmentX(checkxy.CENTER_ALIGNMENT);
 
-			img = ImageIO.read(new File("Images/checkxy-button.png"));
+			img = ImageIO.read(new File("Images/show.png"));
 			genxy.setIcon(new ImageIcon(img));
 			genxy.setSize(50,50);
 			genxy.setBackground(new Color(RED, GREEN, BLUE));
@@ -305,22 +315,23 @@ public class UI{
 			
 			/*sideOptions.add(Box.createHorizontalStrut(10));*/
 			sideOptions.add(check);
-
+			sideOptions.add(Box.createVerticalStrut(5));
 			sideOptions.add(gen);
 			sideOptions.add(Box.createVerticalStrut(10));
 
 			/*sideOptions.add(Box.createHorizontalStrut(10));*/
 			sideOptions.add(checkx);
-			
+			sideOptions.add(Box.createVerticalStrut(5));
 			sideOptions.add(genx);
 			sideOptions.add(Box.createVerticalStrut(10));
 
 			sideOptions.add(checky);
-			
+			sideOptions.add(Box.createVerticalStrut(5));
 			sideOptions.add(geny);
 			sideOptions.add(Box.createVerticalStrut(10));
 
 			sideOptions.add(checkxy);
+			sideOptions.add(Box.createVerticalStrut(5));
 			sideOptions.add(genxy);
 					
 		}catch(Exception ex){
@@ -336,7 +347,7 @@ public class UI{
 		cardHolder.add(puzzleHolder, "Puzzle");
 		cardHolder.add(endWin, "Win");
 		cardHolder.add(endLose, "Lose");
-		cardHolder.add(solns, "Solutions");
+		/*cardHolder.add(solns, "Solutions");*/
 
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setContentPane(cardHolder);
@@ -385,6 +396,7 @@ public class UI{
 						c.show(cardHolder, "Win");
 					} else{
 						JOptionPane.showMessageDialog(null, "No Duplicates! Continue completing the board!");
+
 					}
 				}
 			}
@@ -541,6 +553,14 @@ public class UI{
 			}
 		});
 
+		retry2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+
+				c.show(cardHolder, "Puzzle");
+			}
+		});
+
 		solutions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				JPanel card = null;
@@ -553,12 +573,14 @@ public class UI{
 				Board copy = GamePanel.panelToPuzzle.get(card);
 				Board original = GamePanel.setToOriginal(copy);
 
+				copy.outputBoard();
 				original.outputBoard();
 				// create solver instance
 				Solver copyChecker = new Solver(original, type);
 				copyChecker.backtrack(0,0);
-				solns.displaySolutions(copyChecker);
-
+			
+				Solutions solFrame = new Solutions();
+				solFrame.displaySolutions(copyChecker);
 				CardLayout c = (CardLayout) cardHolder.getLayout();
 				c.show(cardHolder, "Solutions");
 
@@ -579,13 +601,13 @@ public class UI{
 				Board original = GamePanel.setToOriginal(copy);
 
 				copy.outputBoard();
-				System.out.println("Fdsfds");
 				original.outputBoard();
 				// create solver instance
 				Solver copyChecker = new Solver(original, type);
 				copyChecker.backtrack(0,0);
-				solns.displaySolutions(copyChecker);
-
+			
+				Solutions solFrame = new Solutions();
+				solFrame.displaySolutions(copyChecker);
 				CardLayout c = (CardLayout) cardHolder.getLayout();
 				c.show(cardHolder, "Solutions");
 			}
@@ -593,7 +615,8 @@ public class UI{
 		
 		filechooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+				jfc.setCurrentDirectory(new File("."));
 				int returnValue = jfc.showOpenDialog(null);
 				if(returnValue == JFileChooser.APPROVE_OPTION){
 					File selected = jfc.getSelectedFile();
@@ -618,6 +641,110 @@ public class UI{
 						System.out.println(ex);
 					}
 				}	
+			}
+		});
+
+		gen.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				type = "n";
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				Board original = GamePanel.setToOriginal(copy);
+
+				copy.outputBoard();
+				original.outputBoard();
+				// create solver instance
+				Solver copyChecker = new Solver(original, type);
+				copyChecker.backtrack(0,0);
+			
+				Solutions solFrame = new Solutions();
+				solFrame.displaySolutions(copyChecker);
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+				c.show(cardHolder, "Solutions");
+			}
+		});
+
+		genx.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				type = "x";
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				Board original = GamePanel.setToOriginal(copy);
+
+				copy.outputBoard();
+				original.outputBoard();
+				// create solver instance
+				Solver copyChecker = new Solver(original, type);
+				copyChecker.backtrack(0,0);
+			
+				Solutions solFrame = new Solutions();
+				solFrame.displaySolutions(copyChecker);
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+				c.show(cardHolder, "Solutions");
+			}
+		});
+
+		geny.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				type = "y";
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				Board original = GamePanel.setToOriginal(copy);
+
+				copy.outputBoard();
+				original.outputBoard();
+				// create solver instance
+				Solver copyChecker = new Solver(original, type);
+				copyChecker.backtrack(0,0);
+			
+				Solutions solFrame = new Solutions();
+				solFrame.displaySolutions(copyChecker);
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+				c.show(cardHolder, "Solutions");
+			}
+		});
+
+		genxy.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				type = "xy";
+				JPanel card = null;
+				for (Component comp : GamePanel.puzzlePanel.getComponents() ) {
+        			if (comp.isVisible() == true) {
+            			card = (JPanel)comp;
+        			}
+				}
+
+				Board copy = GamePanel.panelToPuzzle.get(card);
+				Board original = GamePanel.setToOriginal(copy);
+
+				copy.outputBoard();
+				original.outputBoard();
+				// create solver instance
+				Solver copyChecker = new Solver(original, type);
+				copyChecker.backtrack(0,0);
+			
+				Solutions solFrame = new Solutions();
+				solFrame.displaySolutions(copyChecker);
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+				c.show(cardHolder, "Solutions");
 			}
 		});
 	}

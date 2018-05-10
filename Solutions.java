@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
+import javax.swing.JFrame;
 
 import java.awt.Font;
 import java.awt.Color;
@@ -27,18 +28,23 @@ import java.io.FileReader;
 import java.awt.image.BufferedImage;
 
 import java.util.ArrayList;
-public class Solutions extends JPanel{
+public class Solutions{
 	public ArrayList<Board> solutions;
 	public static JButton next;
 	public static JButton prev;
 	public static JPanel  btnPanel;
 	public static JPanel centerPanel;
+	public static JFrame solFrame;
+	public static JPanel holder;
 
 	private static final Font font = new Font("Verdana", Font.BOLD, 15);
 
 	public Solutions(){
-		this.setBackground(new Color(UI.RED, UI.GREEN, UI.BLUE));
-		this.setLayout(new BorderLayout());
+		this.solFrame = new JFrame("Solutions");
+		this.holder = new JPanel();
+
+		this.holder.setBackground(new Color(UI.RED, UI.GREEN, UI.BLUE));
+		this.holder.setLayout(new BorderLayout());
 
 		btnPanel = new JPanel();
 		centerPanel = new JPanel();
@@ -73,8 +79,8 @@ public class Solutions extends JPanel{
 		btnPanel.add(prev);
 		btnPanel.add(next);
 
-		this.add(btnPanel, BorderLayout.SOUTH);
-		this.add(centerPanel, BorderLayout.CENTER);
+		this.holder.add(btnPanel, BorderLayout.SOUTH);
+		this.holder.add(centerPanel, BorderLayout.CENTER);
 
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -90,6 +96,15 @@ public class Solutions extends JPanel{
 				c.previous(centerPanel);
 			}
 		});
+
+		solFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		solFrame.setContentPane(holder);
+
+		solFrame.pack();
+		solFrame.setSize(500, 500);
+		solFrame.setLocation(250, 50);
+		solFrame.setVisible(true);
+
 	}
 
 	public void displaySolutions(Solver solver){
@@ -105,8 +120,6 @@ public class Solutions extends JPanel{
 			this.fillTable(temp, this.solutions.get(i));
 			centerPanel.add(temp, String.valueOf(i));
 		}
-
-		this.revalidate();
 	}
 
 	public void fillTable(JPanel panel, Board puzzle){
