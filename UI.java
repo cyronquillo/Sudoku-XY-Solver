@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileSystemView;
@@ -52,6 +53,10 @@ public class UI{
 	private static JButton checkx;
 	private static JButton checky;
 	private static JButton checkxy;
+	private static JButton gen;
+	private static JButton genx;
+	private static JButton geny;
+	private static JButton genxy;	
 	private static JButton filechooser;
 
 	private static BufferedReader in;
@@ -199,6 +204,10 @@ public class UI{
 		checkx = new JButton();
 		checky = new JButton();
 		checkxy = new JButton();
+		gen = new JButton();
+		genx = new JButton();
+		geny = new JButton();
+		genxy = new JButton();
 		filechooser = new JButton();
 
 		sideOptions.setPreferredSize(new Dimension(150 ,500));
@@ -238,6 +247,14 @@ public class UI{
 			check.setBorder(new EmptyBorder(0,0,0,0));
 			check.setAlignmentX(check.CENTER_ALIGNMENT);
 
+			img = ImageIO.read(new File("Images/check-button.png"));
+			gen.setIcon(new ImageIcon(img));
+			gen.setSize(50,50);
+			gen.setBackground(new Color(RED, GREEN, BLUE));
+			gen.setMargin(new Insets(0, 0, 0, 0));
+			gen.setBorder(new EmptyBorder(0,0,0,0));
+			gen.setAlignmentX(gen.LEFT_ALIGNMENT);
+
 			img = ImageIO.read(new File("Images/checkx-button.png"));
 			checkx.setIcon(new ImageIcon(img));
 			checkx.setSize(50,50);
@@ -245,6 +262,14 @@ public class UI{
 			checkx.setMargin(new Insets(0, 0, 0, 0));
 			checkx.setBorder(new EmptyBorder(0,0,0,0));
 			checkx.setAlignmentX(checkx.CENTER_ALIGNMENT);
+
+			img = ImageIO.read(new File("Images/checkx-button.png"));
+			genx.setIcon(new ImageIcon(img));
+			genx.setSize(50,50);
+			genx.setBackground(new Color(RED, GREEN, BLUE));
+			genx.setMargin(new Insets(0, 0, 0, 0));
+			genx.setBorder(new EmptyBorder(0,0,0,0));
+			genx.setAlignmentX(genx.LEFT_ALIGNMENT);
 
 			img = ImageIO.read(new File("Images/checky-button.png"));
 			checky.setIcon(new ImageIcon(img));
@@ -254,6 +279,14 @@ public class UI{
 			checky.setBorder(new EmptyBorder(0,0,0,0));
 			checky.setAlignmentX(checky.CENTER_ALIGNMENT);
 
+			img = ImageIO.read(new File("Images/checky-button.png"));
+			geny.setIcon(new ImageIcon(img));
+			geny.setSize(50,50);
+			geny.setBackground(new Color(RED, GREEN, BLUE));
+			geny.setMargin(new Insets(0, 0, 0, 0));
+			geny.setBorder(new EmptyBorder(0,0,0,0));
+			geny.setAlignmentX(genx.LEFT_ALIGNMENT);
+
 			img = ImageIO.read(new File("Images/checkxy-button.png"));
 			checkxy.setIcon(new ImageIcon(img));
 			checkxy.setSize(50,50);
@@ -261,22 +294,35 @@ public class UI{
 			checkxy.setMargin(new Insets(0, 0, 0, 0));
 			checkxy.setBorder(new EmptyBorder(0,0,0,0));
 			checkxy.setAlignmentX(checkxy.CENTER_ALIGNMENT);
+
+			img = ImageIO.read(new File("Images/checkxy-button.png"));
+			genxy.setIcon(new ImageIcon(img));
+			genxy.setSize(50,50);
+			genxy.setBackground(new Color(RED, GREEN, BLUE));
+			genxy.setMargin(new Insets(0, 0, 0, 0));
+			genxy.setBorder(new EmptyBorder(0,0,0,0));
+			genxy.setAlignmentX(genxy.LEFT_ALIGNMENT);
 			
 			/*sideOptions.add(Box.createHorizontalStrut(10));*/
 			sideOptions.add(check);
+
+			sideOptions.add(gen);
 			sideOptions.add(Box.createVerticalStrut(10));
 
 			/*sideOptions.add(Box.createHorizontalStrut(10));*/
 			sideOptions.add(checkx);
+			
+			sideOptions.add(genx);
 			sideOptions.add(Box.createVerticalStrut(10));
 
-			/*sideOptions.add(Box.createHorizontalStrut(10));*/
 			sideOptions.add(checky);
+			
+			sideOptions.add(geny);
 			sideOptions.add(Box.createVerticalStrut(10));
 
-			/*sideOptions.add(Box.createHorizontalStrut(10));*/
 			sideOptions.add(checkxy);
-		
+			sideOptions.add(genxy);
+					
 		}catch(Exception ex){
 			System.out.println(ex);
 		}
@@ -332,13 +378,14 @@ public class UI{
 					if(holder) break;
 				}
 				
-				holder = copyChecker.zero_exists(copy);
-
-				CardLayout c = (CardLayout) cardHolder.getLayout();
 				if(!holder){
-					c.show(cardHolder, "Win");
-				} else {
-					c.show(cardHolder, "Lose");
+					holder = copyChecker.zero_exists();
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					if(!holder){
+						c.show(cardHolder, "Win");
+					} else{
+						JOptionPane.showMessageDialog(null, "No Duplicates! Continue completing the board!");
+					}
 				}
 			}
 		});
@@ -365,9 +412,15 @@ public class UI{
 					}
 					if(holder) break;
 				}
+
 				if(!holder){
+					holder = copyChecker.zero_exists();
 					CardLayout c = (CardLayout) cardHolder.getLayout();
-					c.show(cardHolder, "Win");
+					if(!holder){
+						c.show(cardHolder, "Win");
+					} else{
+						JOptionPane.showMessageDialog(null, "No Duplicates! Continue completing the board!");
+					}
 				}
 			}
 		});
@@ -393,9 +446,15 @@ public class UI{
 					}
 					if(holder) break;
 				}
+
 				if(!holder){
+					holder = copyChecker.zero_exists();
 					CardLayout c = (CardLayout) cardHolder.getLayout();
-					c.show(cardHolder, "Win");
+					if(!holder){
+						c.show(cardHolder, "Win");
+					} else{
+						JOptionPane.showMessageDialog(null, "No Duplicates! Continue completing the board!");
+					}
 				}
 			}
 		});
@@ -422,8 +481,13 @@ public class UI{
 					if(holder) break;
 				}
 				if(!holder){
+					holder = copyChecker.zero_exists();
 					CardLayout c = (CardLayout) cardHolder.getLayout();
-					c.show(cardHolder, "Win");
+					if(!holder){
+						c.show(cardHolder, "Win");
+					} else{
+						JOptionPane.showMessageDialog(null, "No Duplicates! Continue completing the board!");
+					}
 				}
 			}
 		});
@@ -442,11 +506,22 @@ public class UI{
 
 				Board copy = GamePanel.panelToPuzzle.get(card);
 				
-				// create solver instance
-				Solver copyChecker = new Solver(copy, "xy");
-				// copyChecker.clearNonPreset();
-				// GamePanel.panelToPuzzle.put(card, copyChecker.solve);
-				JOptionPane.showMessageDialog(null, "Reset Values");
+				for(int i = 0; i < copy.size; i++){
+					for(int j = 0; j < copy.size; j++){
+						if(!copy.board[i][j].is_preset){
+							copy.board[i][j].top_of_stack = 0;
+						}
+					}
+				}
+
+				for (Component cell : card.getComponents() ) {
+					JTextField field = (JTextField)cell;
+					if(field.isEditable()){
+						field.setText("");
+					}
+				}
+
+				// JOptionPane.showMessageDialog(null, "Reset Values");
 			}
 		});
 

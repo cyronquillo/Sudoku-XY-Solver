@@ -224,13 +224,12 @@ public class Solver{
         }
     }
 
-    public boolean zero_exists(Board puzzle){
-        int size = puzzle.size;
+    public boolean zero_exists(){
+        int size = this.solve.size;
 
         for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
-                if(puzzle.board[i][j].top_of_stack == 0) return true;
-                else continue;
+                if(solve.board[i][j].top_of_stack == 0) return true;
             }
         }
 

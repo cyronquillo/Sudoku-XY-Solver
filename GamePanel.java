@@ -123,7 +123,7 @@ public class GamePanel extends JPanel{
 
 				if(puzzle.board[i][j].is_preset){
 					cell = new JTextField(String.valueOf(puzzle.board[i][j].top_of_stack));
-					cell.setEnabled(false);
+					cell.setEditable(false);
 				} else{
 					cell = new JTextField(" ");
 					cell.setBackground(Color.YELLOW);

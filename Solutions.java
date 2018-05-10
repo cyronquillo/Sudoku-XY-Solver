@@ -117,7 +117,7 @@ public class Solutions extends JPanel{
 		for(int i=0; i<size; i++){
 			for(int j=0; j<size; j++){
 				cell = new JTextField(String.valueOf(puzzle.board[i][j].top_of_stack));
-				cell.setEnabled(false);
+				cell.setEditable(false);
 
 				if(i%subgrid == 0 && j%subgrid==0){
 					cell.setBorder(BorderFactory.createMatteBorder(3,3,1,1,Color.BLACK));
