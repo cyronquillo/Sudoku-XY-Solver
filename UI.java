@@ -663,10 +663,14 @@ public class UI{
 				Solver copyChecker = new Solver(original, type);
 				copyChecker.backtrack(0,0);
 			
-				Solutions solFrame = new Solutions();
-				solFrame.displaySolutions(copyChecker);
-				CardLayout c = (CardLayout) cardHolder.getLayout();
-				c.show(cardHolder, "Solutions");
+				if(copyChecker.num_of_solutions == 0){
+					JOptionPane.showMessageDialog(null, "No possible solutions generated.");
+				} else{
+					Solutions solFrame = new Solutions();
+					solFrame.displaySolutions(copyChecker);
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					c.show(cardHolder, "Solutions");
+				}
 			}
 		});
 
@@ -689,10 +693,14 @@ public class UI{
 				Solver copyChecker = new Solver(original, type);
 				copyChecker.backtrack(0,0);
 			
-				Solutions solFrame = new Solutions();
-				solFrame.displaySolutions(copyChecker);
-				CardLayout c = (CardLayout) cardHolder.getLayout();
-				c.show(cardHolder, "Solutions");
+				if(copyChecker.num_of_solutions == 0){
+					JOptionPane.showMessageDialog(null, "No possible solutions generated for Sudoku X.");
+				} else{
+					Solutions solFrame = new Solutions();
+					solFrame.displaySolutions(copyChecker);
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					c.show(cardHolder, "Solutions");
+				}
 			}
 		});
 
@@ -714,11 +722,15 @@ public class UI{
 				// create solver instance
 				Solver copyChecker = new Solver(original, type);
 				copyChecker.backtrack(0,0);
-			
-				Solutions solFrame = new Solutions();
-				solFrame.displaySolutions(copyChecker);
-				CardLayout c = (CardLayout) cardHolder.getLayout();
-				c.show(cardHolder, "Solutions");
+
+				if(copyChecker.num_of_solutions == 0){
+					JOptionPane.showMessageDialog(null, "No possible solutions generated for Sudoku Y.");
+				} else{
+					Solutions solFrame = new Solutions();
+					solFrame.displaySolutions(copyChecker);
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					c.show(cardHolder, "Solutions");
+				}
 			}
 		});
 
@@ -740,11 +752,15 @@ public class UI{
 				// create solver instance
 				Solver copyChecker = new Solver(original, type);
 				copyChecker.backtrack(0,0);
-			
-				Solutions solFrame = new Solutions();
-				solFrame.displaySolutions(copyChecker);
-				CardLayout c = (CardLayout) cardHolder.getLayout();
-				c.show(cardHolder, "Solutions");
+				
+				if(copyChecker.num_of_solutions == 0){
+					JOptionPane.showMessageDialog(null, "No solutions generated for Sudoku XY.");
+				} else{
+					Solutions solFrame = new Solutions();
+					solFrame.displaySolutions(copyChecker);
+					CardLayout c = (CardLayout) cardHolder.getLayout();
+					c.show(cardHolder, "Solutions");
+				}
 			}
 		});
 	}

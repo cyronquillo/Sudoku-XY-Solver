@@ -36,10 +36,12 @@ public class Solutions{
 	public static JPanel centerPanel;
 	public static JFrame solFrame;
 	public static JPanel holder;
-
+	public static JLabel label_counter;
+	public int counter;
 	private static final Font font = new Font("Verdana", Font.BOLD, 15);
 
 	public Solutions(){
+		this.counter = 1;
 		this.solFrame = new JFrame("Solutions");
 		this.holder = new JPanel();
 
@@ -75,9 +77,12 @@ public class Solutions{
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
-
+		label_counter = new JLabel("");
+		label_counter.setFont(new Font(label_counter.getName(), Font.BOLD, 15));
 		btnPanel.add(prev);
 		btnPanel.add(next);
+		btnPanel.add(label_counter);
+		
 
 		this.holder.add(btnPanel, BorderLayout.SOUTH);
 		this.holder.add(centerPanel, BorderLayout.CENTER);
@@ -85,7 +90,11 @@ public class Solutions{
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				CardLayout c = (CardLayout) centerPanel.getLayout();
+
 				c.next(centerPanel);
+				counter++;
+				if(counter > solutions.size()) counter = 1;
+				label_counter.setText(counter + " of " + solutions.size());
 			}
 		});
 
@@ -94,6 +103,10 @@ public class Solutions{
 				CardLayout c = (CardLayout) centerPanel.getLayout();
 
 				c.previous(centerPanel);
+				
+				counter--;
+				if(counter == 0) counter = solutions.size();
+				label_counter.setText(counter + " of " + solutions.size());	
 			}
 		});
 
@@ -110,6 +123,7 @@ public class Solutions{
 	public void displaySolutions(Solver solver){
 		this.solutions = solver.getSolutions();
 		System.out.println(this.solutions.size());
+		label_counter.setText(counter + " of " + solutions.size());	
 
 		for(int i=0; i<this.solutions.size(); i++){
 			int n = this.solutions.get(i).size;
