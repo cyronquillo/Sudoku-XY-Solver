@@ -507,6 +507,10 @@ public class UI{
 				}
 
 				Board copy = GamePanel.panelToPuzzle.get(card);
+				if(copy.size % 2 == 0){
+					JOptionPane.showMessageDialog(null, "Even boards have no Sudoku Y checkers.");
+					return;
+				}
 				// create solver instance
 				Solver copyChecker = new Solver(copy, "y");
 				boolean holder = false;
@@ -539,8 +543,15 @@ public class UI{
             			card = (JPanel)comp;
         			}
 				}
+				
 
 				Board copy = GamePanel.panelToPuzzle.get(card);
+
+				if(copy.size % 2 == 0){
+					JOptionPane.showMessageDialog(null, "Even boards have no Sudoku XY checkers.");
+					return;
+				}
+				
 				// create solver instance
 				Solver copyChecker = new Solver(copy, "xy");
 				boolean holder = false;
@@ -687,7 +698,9 @@ public class UI{
 					try{
 						in = new BufferedReader(new FileReader(selected));
 						int test_cases = Integer.parseInt(in.readLine());
-
+						game.currPuzzle = 1;
+						game.totalPuzzles = test_cases;
+						game.updateLabel();
 						for(int i=0; i<test_cases; i++){
 							Board b = new Board(in);
 							puzzles.add(b);
@@ -775,7 +788,10 @@ public class UI{
 
 				Board copy = GamePanel.panelToPuzzle.get(card);
 				Board original = GamePanel.setToOriginal(copy);
-
+				if(copy.size % 2 == 0){
+					JOptionPane.showMessageDialog(null, "Even boards have no Sudoku Y solutions.");
+					return;
+				}
 				copy.outputBoard();
 				original.outputBoard();
 				// create solver instance
@@ -805,6 +821,11 @@ public class UI{
 
 				Board copy = GamePanel.panelToPuzzle.get(card);
 				Board original = GamePanel.setToOriginal(copy);
+
+				if(copy.size % 2 == 0){
+					JOptionPane.showMessageDialog(null, "Even boards have no Sudoku XY solutions.");
+					return;
+				}
 
 				copy.outputBoard();
 				original.outputBoard();

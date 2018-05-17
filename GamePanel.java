@@ -29,10 +29,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GamePanel extends JPanel{
+	public static final String space = "                                                                         ";
 	private static ArrayList<Board> puzzles;
 	private static JPanel buttonPanel;
 	private static JButton next;
 	private static JButton prev;
+	private static JLabel puzzleCounter;
+	public int currPuzzle;
+	public int totalPuzzles;
 
 	public static HashMap<JPanel, Board> panelToPuzzle = new HashMap<JPanel, Board>();
 	public static JPanel puzzlePanel;
@@ -74,9 +78,16 @@ public class GamePanel extends JPanel{
 			System.out.println(e);
 		}
 
+		puzzleCounter = new JLabel(space + "Puzzle: - of -");
+
+		// buttonPanel.setLayout(null);
 
 		buttonPanel.add(prev);
+		prev.setLocation(30,40);
 		buttonPanel.add(next);
+		next.setLocation(100,150);
+		buttonPanel.add(puzzleCounter);
+		puzzleCounter.setLocation(200,250);
 
 		this.add(buttonPanel, BorderLayout.SOUTH);
 		this.add(puzzlePanel, BorderLayout.CENTER);
@@ -84,14 +95,18 @@ public class GamePanel extends JPanel{
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				CardLayout c = (CardLayout) puzzlePanel.getLayout();
-
+				currPuzzle++;
+				if(currPuzzle > totalPuzzles) currPuzzle = 1;
+				updateLabel();
 				c.next(puzzlePanel);
 			}
 		});
 		prev.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				CardLayout c = (CardLayout) puzzlePanel.getLayout();
-
+				currPuzzle--;
+				if(currPuzzle == 0) currPuzzle = totalPuzzles;
+				updateLabel();
 				c.previous(puzzlePanel);
 			}
 		});
@@ -159,5 +174,9 @@ public class GamePanel extends JPanel{
 		}
 
 		return temp;
+	}
+
+	public void updateLabel(){
+		puzzleCounter.setText(space + "Puzzle: " + currPuzzle + " of " + totalPuzzles);
 	}
 }
