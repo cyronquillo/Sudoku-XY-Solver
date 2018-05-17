@@ -34,6 +34,7 @@ import java.util.ArrayList;
 public class UI{
 	private static JPanel cardHolder;
 	private static JPanel menu;
+	private static JPanel instructions;
 	private static JPanel puzzleHolder;
 	private static JPanel endWin;
 	private static JPanel endLose;
@@ -45,6 +46,8 @@ public class UI{
 	private static JButton solutions;
 	private static JButton start;
 	private static JButton win;
+	private static JButton back;
+	private static JButton insButton;
 	private static JButton retry;
 	private static JButton solutions2;
 	private static JButton retry2;
@@ -78,6 +81,7 @@ public class UI{
 		cardHolder = new JPanel(new CardLayout());
 
 		menu = new JPanel();
+		instructions = new JPanel();
 		puzzleHolder = new JPanel();
 		endWin = new JPanel();
 		endLose = new JPanel();
@@ -87,6 +91,7 @@ public class UI{
 
 		/*START OF MENU PANEL*/
 		start = new JButton();
+		insButton = new JButton();
 
 		menu.setBackground(new Color(RED, GREEN, BLUE));
 		menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
@@ -101,6 +106,14 @@ public class UI{
 			start.setBorder(new EmptyBorder(0,0,0,0));
 			start.setAlignmentX(menu.CENTER_ALIGNMENT);
 
+			BufferedImage img2 = ImageIO.read(new File("Images/insButton.png"));
+			insButton.setIcon(new ImageIcon(img2));
+			insButton.setSize(50,50);
+			insButton.setBackground(new Color(RED, GREEN, BLUE));
+			insButton.setMargin(new Insets(0, 0, 0, 0));
+			insButton.setBorder(new EmptyBorder(0,0,0,0));
+			insButton.setAlignmentX(menu.CENTER_ALIGNMENT);
+
 			BufferedImage mainPanelImage;
 
 			mainPanelImage = ImageIO.read(new File("Images/title.png"));
@@ -108,15 +121,46 @@ public class UI{
 			picLabel.setPreferredSize(new Dimension(570, 275));
 			picLabel.setAlignmentX(menu.CENTER_ALIGNMENT);
 
-			menu.add(Box.createVerticalStrut(250));
+			menu.add(Box.createVerticalStrut(150));
 			menu.add(picLabel);
 			menu.add(Box.createVerticalStrut(50));
 			menu.add(start);
+			menu.add(Box.createVerticalStrut(10));
+			menu.add(insButton);
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
 
 		/*END OF MENU PANEL*/
+		/* START OF INSTRUCTIONS PANEL */
+		back = new JButton();
+		instructions.setBackground(Color.WHITE);
+		instructions.setLayout(new BoxLayout(instructions, BoxLayout.Y_AXIS));
+		try{
+			BufferedImage img = ImageIO.read(new File("Images/rsz_backbutton.png"));
+			back.setIcon(new ImageIcon(img));
+			back.setSize(50,50);
+			back.setBackground(Color.WHITE);
+			back.setBorder(new EmptyBorder(0,0,0,0));
+			back.setAlignmentX(instructions.CENTER_ALIGNMENT);
+
+			BufferedImage instructionPanelImage = ImageIO.read(new File("Images/insTitle.png"));
+			JLabel insLabel = new JLabel(new ImageIcon(instructionPanelImage));
+
+			BufferedImage inspic = ImageIO.read(new File("Images/ins.png"));
+			JLabel inspicLabel = new JLabel(new ImageIcon(inspic));
+			
+
+			instructions.add(insLabel);
+			instructions.add(inspicLabel);
+			instructions.add(back);
+
+		}catch(Exception e){
+			System.out.println(e);
+		}
+
+
+		/* END OF INSTRUCTIONS PANEL*/
 
 		/*START OF WIN PANEL*/
 		solutions = new JButton();
@@ -344,6 +388,7 @@ public class UI{
 		/*END OF PUZZLE PANEL*/
 
 		cardHolder.add(menu, "Menu");
+		cardHolder.add(instructions,"Instructions");
 		cardHolder.add(puzzleHolder, "Puzzle");
 		cardHolder.add(endWin, "Win");
 		cardHolder.add(endLose, "Lose");
@@ -364,6 +409,20 @@ public class UI{
 				CardLayout c = (CardLayout) cardHolder.getLayout();
 
 				c.show(cardHolder, "Puzzle");
+			}
+		});
+		back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+
+				c.show(cardHolder, "Menu");
+			}
+		});
+		insButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				CardLayout c = (CardLayout) cardHolder.getLayout();
+
+				c.show(cardHolder, "Instructions");
 			}
 		});
 		check.addActionListener(new ActionListener() {
