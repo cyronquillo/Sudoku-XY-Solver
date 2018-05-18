@@ -79,6 +79,7 @@ public class GamePanel extends JPanel{
 		}
 
 		puzzleCounter = new JLabel(space + "Puzzle: - of -");
+		puzzleCounter.setFont(new Font(puzzleCounter.getName(), Font.BOLD, 15));
 
 		// buttonPanel.setLayout(null);
 
